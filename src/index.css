@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&family=Roboto:wght@400;500&family=Pacifico&family=Rubik:wght@400;700;900&display=swap');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+:root {
+  overflow-x: hidden;
+
+  --color-background-main: #1a0a16;
+  --color-background-alt: #271d26;
+  --color-background-light: #3e1a38;
+  --color-background-section: #4f1f45;
+
+  --color-accent: #ff00e0;
+  --color-accent-2: #26001f;
+  --color-accent-3: #ff66f3;
+  --color-accent-sub: #5a2350;
+  --color-accent-magenta: #ff00e0;
+  --color-accent-magenta-light: #ff66f3;
+  --color-accent-magenta-dark: #4c0040;
+
+  --color-text-special: #ff66f3;
+  --color-text-main: #fcd6f9;
+  --color-text-sub: #e8a7e0;
+
+  --color-hover: #ff33d4;
+  --color-hover-magenta: #ff33d4;
+  --color-border-color: #732c64;
+  --color-border-color-2: #5e1d50;
+
+  --font-size-header: 4rem;
+  --font-size-main: 1rem;
+  --font-size-sub: 0.8rem;
+
+  --font-text-special: 'Pacifico';
+  --font-text-main: 'Outfit';
+  --font-text-sub: 'Roboto';
+  --font-text-alt: 'Rubik';
+
+  font-family: var(--font-text-main), var(--font-text-sub), sans-serif;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--color-text-main);
+  background-color: var(--color-background-main);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.special-text {
+  color: var(--color-text-main);
+  font-family: var(--font-text-special);
+  font-size: var(--font-size-header);
+  text-shadow: 0 0 10px var(--color-text-main);
+}
+
+.main-text {
+  color: var(--color-text-main);
+  font-family: var(--font-text-main);
+  font-size: var(--font-size-main);
+}
+
+.sub-text {
+  color: var(--color-text-sub);
+  font-family: var(--font-text-sub);
+  font-size: var(--font-size-sub);
+}
+
+::selection {
+  background: var(--color-hover-magenta);
+  color: var(--color-background-main);
+}
+
+.section-magenta {
+  background-color: var(--color-background-section);
+  border: 1px solid var(--color-border-color-2);
+}
+
+.button-magenta {
+  background-color: var(--color-accent-magenta);
+  color: white;
+  box-shadow: 0 0 10px var(--color-accent-magenta-light);
+}
+
+.button-magenta:hover {
+  background-color: var(--color-accent-magenta-light);
+}
+
+.shiny-btn {
+  font-size: var(--font-size-main);
+  cursor: pointer;
+  width: 250px;
+  height: 50px;
+  border-radius: 2rem;
+  position: relative;
+  overflow: hidden;
+}
