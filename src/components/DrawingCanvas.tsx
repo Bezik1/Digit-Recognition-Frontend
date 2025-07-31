@@ -12,7 +12,7 @@ import { markCrossPixels } from "../utils/markCrossPixels";
 import { drawLine } from "../utils/drawLine";
 
 import type { ServerResponse } from "../types/Response";
-import { DotLoader } from "react-spinners";
+import { PuffLoader } from "react-spinners";
 
 const DrawingCanvas: React.FC = () => {
     const [loading, setLoading] = useState(false)
@@ -135,7 +135,7 @@ const DrawingCanvas: React.FC = () => {
                     >
                         {loading 
                             ? <div className="loading-container">
-                                <DotLoader color="#fcd6f9" speedMultiplier={0.6}/>
+                                <PuffLoader className="loading-ico" color="#fcd6f9" speedMultiplier={1.3}/>
                             </div>
                             : <>
                                 <div className="special-text digit">{prediction}</div>
