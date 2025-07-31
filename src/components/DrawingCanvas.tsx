@@ -12,8 +12,10 @@ import { markCrossPixels } from "../utils/markCrossPixels";
 import { drawLine } from "../utils/drawLine";
 
 import type { ServerResponse } from "../types/Response";
+import { DotLoader } from "react-spinners";
 
 const DrawingCanvas: React.FC = () => {
+    const [loading, setLoading] = useState(false)
     const { prediction, probability, setPrediction, setProbability } = usePrediction()
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -64,8 +66,6 @@ const DrawingCanvas: React.FC = () => {
     const handleMouseUp = () => {
         setIsDrawing(false);
         lastPos.current = null;
-
-        handleSend();
     };
 
     const clearCanvas = () => {
@@ -79,12 +79,13 @@ const DrawingCanvas: React.FC = () => {
     };
 
     const handleSend = async () => {
+        setLoading(true)
         const payload = { pixels: pixels.map(row => row.map(p => Math.round(p * 255))) };
         const res = await axios.post<ServerResponse>(PREDICTION_URL, payload);
         
-        console.log(res)
         setPrediction(res.data.data.digit);
         setProbability(res.data.data.probability)
+        setLoading(false)
     };
 
     useEffect(() => {
@@ -112,7 +113,7 @@ const DrawingCanvas: React.FC = () => {
                         whileHover="hover"
                         initial={{ opacity: 0, scale: 0 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8, type: 'spring' }}
+                        transition={{ duration: 0.8, delay: 0.3, type: 'spring' }}
                         variants={{
                             hover: {
                                 scale: 1.05,
@@ -126,17 +127,28 @@ const DrawingCanvas: React.FC = () => {
                     >
                         Wyślij
                     </motion.button>
-                    <div className="info">
-                        <div className="special-text digit">{prediction}</div>
-                        <div className="main-text probability">{probability}%</div>
-                    </div>
+                    <motion.div
+                        className="info"
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8, type: 'spring' }}
+                    >
+                        {loading 
+                            ? <div className="loading-container">
+                                <DotLoader color="#fcd6f9" speedMultiplier={0.6}/>
+                            </div>
+                            : <>
+                                <div className="special-text digit">{prediction}</div>
+                                <div className="main-text probability">{probability}%</div>
+                            </>}
+                    </motion.div>
                     <motion.button
                         onClick={clearCanvas}
                         className="shiny-btn btn"
                         whileHover="hover"
                         initial={{ opacity: 0, scale: 0 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8, type: 'spring' }}
+                        transition={{ duration: 0.8, delay: 0.3, type: 'spring' }}
                         variants={{
                             hover: {
                                 scale: 1.05,
