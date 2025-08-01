@@ -86,13 +86,28 @@
         flex-direction: column;
     }
 
+    .drawing-canvas {
+        margin-top: 5%;
+    }
+
     .btn {
         margin-top: 10vh;
         width: 30vw;
     }
 
     .info {
-        margin-top: -15vh;
+        margin-top: -10vh;
+        width: 80px;
+        height: 80px;
+        border-radius: 100%;
         position: absolute;
+    }
+
+    .digit {
+        font-size: 2.5rem;
+    }
+
+    .probability {
+        margin-top: -10px;
     }
 }
