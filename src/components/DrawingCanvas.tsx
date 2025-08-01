@@ -163,7 +163,7 @@ const DrawingCanvas: React.FC = () => {
     
 
     return (
-        <section>
+        <section className="container">
             <div className="canvas-container">
                 <canvas
                     ref={canvasRef}

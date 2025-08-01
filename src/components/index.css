@@ -1,10 +1,19 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .drawing-canvas {
     border-radius: 3rem;
+    display: flex;
+    justify-content: center;
 }
 
 .canvas-container {
     border-radius: 3rem;
     background-color: var(--color-background-alt);
+    justify-content: center;
     padding: 20px;
 }
 
