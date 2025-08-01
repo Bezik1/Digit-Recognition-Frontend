@@ -7,6 +7,10 @@ html, body {
   overflow-y: hidden;
 }
 
+button {
+  color: inherit;
+}
+
 input:focus,
 textarea:focus {
     outline: none;

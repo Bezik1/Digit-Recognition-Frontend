@@ -92,6 +92,57 @@ const DrawingCanvas: React.FC = () => {
         clearCanvas();
     }, []);
 
+    const getTouchPos = (e: React.TouchEvent) => {
+        const canvas = canvasRef.current!;
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const x = Math.floor((touch.clientX - rect.left) * scaleX / PIXEL_SIZE);
+        const y = Math.floor((touch.clientY - rect.top) * scaleY / PIXEL_SIZE);
+        
+        return { x, y };
+    };
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        e.preventDefault();
+        setIsDrawing(true);
+        const { x, y } = getTouchPos(e);
+        lastPos.current = { x, y };
+    
+        setPixels((prev) => {
+            const updated = markCrossPixels(x, y, prev);
+            drawCrossPixel(canvasRef, x, y);
+            return updated;
+        });
+    };
+    
+    const handleTouchMove = (e: React.TouchEvent) => {
+        e.preventDefault();
+        if (!isDrawing) return;
+        const { x, y } = getTouchPos(e);
+    
+        if (lastPos.current) {
+            drawLine(updatePixels, lastPos.current.x, lastPos.current.y, x, y);
+        } else {
+            setPixels((prev) => {
+                const updated = markCrossPixels(x, y, prev);
+                drawCrossPixel(canvasRef, x, y);
+                return updated;
+            });
+        }
+    
+        lastPos.current = { x, y };
+    };
+    
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        e.preventDefault();
+        setIsDrawing(false);
+        lastPos.current = null;
+    };
+    
+    
+
     return (
         <section>
             <div className="canvas-container">
@@ -104,6 +155,10 @@ const DrawingCanvas: React.FC = () => {
                     onMouseUp={handleMouseUp}
                     onMouseLeave={handleMouseUp}
                     onMouseMove={handleMouse}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    onTouchCancel={handleTouchEnd}
                     style={{ background: "black", cursor: "crosshair" }}
                 />
                 <div className="btns">
