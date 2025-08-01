@@ -1,9 +1,9 @@
 .container {
     display: flex;
-    justify-content: center; /* poziome wyśrodkowanie */
-    align-items: center;     /* pionowe wyśrodkowanie */
-    height: 100vh;           /* pełna wysokość ekranu */
-    width: 100vw;            /* pełna szerokość ekranu */
+    justify-content: center; 
+    align-items: center;     
+    height: 100vh;           
+    width: 100vw;           
 }
 
 .drawing-canvas {
@@ -13,7 +13,7 @@
 .canvas-container {
     display: flex;
     flex-direction: column;
-    align-items: center; /* wyśrodkowanie canvas i przycisków */
+    align-items: center;
     justify-content: center;
     border-radius: 3rem;
     background-color: var(--color-background-alt);

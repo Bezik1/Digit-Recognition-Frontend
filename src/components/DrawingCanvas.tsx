@@ -23,45 +23,26 @@ const DrawingCanvas: React.FC = () => {
     const [pixels, setPixels] = useState<number[][]>(
         Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(0))
     );
-    const lastPos = useRef<{ x: number; y: number } | null>(null);
-    const [canvasSize, setCanvasSize] = useState(0);
-
-    useEffect(() => {
-    const updateCanvasSize = () => {
-        const maxWidth = window.innerWidth * 0.85;  // 90% szerokości ekranu
-        const maxHeight = window.innerHeight * 0.7; // 50% wysokości ekranu
-
-        const maxCanvasSize = Math.min(maxWidth, maxHeight);
-        const pixelSize = Math.floor(maxCanvasSize / GRID_SIZE);
-
-        setCanvasSize(pixelSize * GRID_SIZE);
-    };
-
-    updateCanvasSize();
-    window.addEventListener("resize", updateCanvasSize);
-
-    return () => window.removeEventListener("resize", updateCanvasSize);
-}, []);
-
+    const lastPos = useRef<{ x: number; y: number } | null>(null);  
 
     const updatePixels = () =>{
         setPixels((prev) => {
             if(!lastPos.current) { 
-                return prev;
+                throw new Error("Illegal State")
             }
+
             const updated = markCrossPixels(lastPos.current.x, lastPos.current.y, prev);
             drawCrossPixel(canvasRef, lastPos.current.x, lastPos.current.y);
             return updated;
         });
     }
-    
 
     const handleMouse = (e: React.MouseEvent) => {
         if (!isDrawing) return;
         const canvas = canvasRef.current!;
         const rect = canvas.getBoundingClientRect();
-        const x = Math.floor((e.clientX - rect.left) / (canvasSize / GRID_SIZE));
-        const y = Math.floor((e.clientY - rect.top) / (canvasSize / GRID_SIZE));
+        const x = Math.floor((e.clientX - rect.left) / PIXEL_SIZE);
+        const y = Math.floor((e.clientY - rect.top) / PIXEL_SIZE);
 
         if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) return;
 
@@ -88,24 +69,14 @@ const DrawingCanvas: React.FC = () => {
     };
 
     const clearCanvas = () => {
-        const canvas = canvasRef.current!;
-        const ctx = canvas.getContext("2d")!;
-        
-        const scale = window.devicePixelRatio || 1;
-    
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.scale(scale, scale);
-    
+        const ctx = canvasRef.current!.getContext("2d")!;
         ctx.fillStyle = "#12000f";
-        ctx.fillRect(0, 0, canvasSize, canvasSize);
-    
+        ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
         setPixels(Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(0)));
         lastPos.current = null;
         setPrediction(0);
-        setProbability(0);
+        setProbability(0)
     };
-    
 
     const handleSend = async () => {
         setLoading(true)
@@ -117,19 +88,18 @@ const DrawingCanvas: React.FC = () => {
         setLoading(false)
     };
 
+    useEffect(() => {
+        clearCanvas();
+    }, []);
+
     const getTouchPos = (e: React.TouchEvent) => {
         const canvas = canvasRef.current!;
         const rect = canvas.getBoundingClientRect();
         const touch = e.touches[0];
-    
-        // Użyj rzeczywistego rozmiaru canvasu (renderowanego), nie tylko CSSowego
-        const x = Math.floor((touch.clientX - rect.left) * (canvas.width / rect.width) / (canvas.width / GRID_SIZE));
-        const y = Math.floor((touch.clientY - rect.top) * (canvas.height / rect.height) / (canvas.height / GRID_SIZE));
-    
+        const x = Math.floor((touch.clientX - rect.left) / PIXEL_SIZE);
+        const y = Math.floor((touch.clientY - rect.top) / PIXEL_SIZE);
         return { x, y };
     };
-    
-    
 
     const handleTouchStart = (e: React.TouchEvent) => {
         e.preventDefault();
@@ -168,30 +138,15 @@ const DrawingCanvas: React.FC = () => {
         lastPos.current = null;
     };
     
-    useEffect(() => {
-        if (!canvasSize) return;
-        const scale = window.devicePixelRatio || 1;
-        const canvas = canvasRef.current!;
-        const ctx = canvas.getContext("2d")!;
-        
-        canvas.style.width = `${canvasSize}px`;
-        canvas.style.height = `${canvasSize}px`;
-        canvas.width = canvasSize * scale;
-        canvas.height = canvasSize * scale;
-        ctx.scale(scale, scale);
-        clearCanvas();
-        
-    }, [canvasSize]);
-
     
 
     return (
-        <section className="container">
+        <section>
             <div className="canvas-container">
                 <canvas
                     ref={canvasRef}
-                    width={canvasSize}
-                    height={canvasSize}
+                    width={CANVAS_SIZE}
+                    height={CANVAS_SIZE}
                     className="drawing-canvas border border-white"
                     onMouseDown={handleMouseDown}
                     onMouseUp={handleMouseUp}
@@ -201,7 +156,7 @@ const DrawingCanvas: React.FC = () => {
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                     onTouchCancel={handleTouchEnd}
-                    style={{ borderRadius: '3rem',  width: `${canvasSize}px`, height: `${canvasSize}px`, background: "black", cursor: "crosshair" }}
+                    style={{ background: "black", cursor: "crosshair" }}
                 />
                 <div className="btns">
                     <motion.button
