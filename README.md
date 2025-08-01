@@ -4,12 +4,16 @@
 
 Frontend of Digit Recongition App was built using Vite, React and typescript. Animations were designed, with the help of framer-motion framework and for API requests I used axios. 
 
+![Banner](./public/assets/photos/desktop-view.png)
+
+
 ## 🗒️ Features
 
 * 🧑‍🏫 Interactive, responsive canvas, which allows user to draw the digit
 * 🪄 User is getting number prediciton of what digit he had drawn
 * 🔘 User can clear the board and send request for prediction
 * 🗛 Responsive web design
+
 
 ## ⚙️ Command Tools
 
