@@ -26,13 +26,12 @@ const DrawingCanvas: React.FC = () => {
     const lastPos = useRef<{ x: number; y: number } | null>(null);  
 
     const updatePixels = () =>{
-        setPixels((prev) => {
-            if(!lastPos.current) { 
-                throw new Error("Illegal State")
-            }
+        if(lastPos.current == null) return;
 
-            const updated = markCrossPixels(lastPos.current.x, lastPos.current.y, prev);
-            drawCrossPixel(canvasRef, lastPos.current.x, lastPos.current.y);
+        const { x, y } = lastPos.current;
+        setPixels((prev) => {
+            const updated = markCrossPixels(x, y, prev);
+            drawCrossPixel(canvasRef, x, y);
             return updated;
         });
     }
