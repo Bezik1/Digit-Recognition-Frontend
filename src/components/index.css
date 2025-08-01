@@ -1,4 +1,5 @@
 .drawing-canvas {
+    touch-action: none; 
     border-radius: 3rem;
 }
 
