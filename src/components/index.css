@@ -7,6 +7,7 @@
 }
 
 .drawing-canvas {
+    border-radius: 3rem;
     touch-action: none;
 }
 
@@ -87,7 +88,7 @@
 
     .btn {
         margin-top: 10vh;
-        width: 100%;
+        width: 30vw;
     }
 
     .info {
