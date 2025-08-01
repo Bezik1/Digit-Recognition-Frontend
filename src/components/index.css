@@ -1,19 +1,22 @@
 .container {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: center; /* poziome wyśrodkowanie */
+    align-items: center;     /* pionowe wyśrodkowanie */
+    height: 100vh;           /* pełna wysokość ekranu */
+    width: 100vw;            /* pełna szerokość ekranu */
 }
 
 .drawing-canvas {
-    border-radius: 3rem;
-    display: flex;
-    justify-content: center;
+    touch-action: none;
 }
 
 .canvas-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* wyśrodkowanie canvas i przycisków */
+    justify-content: center;
     border-radius: 3rem;
     background-color: var(--color-background-alt);
-    justify-content: center;
     padding: 20px;
 }
 
