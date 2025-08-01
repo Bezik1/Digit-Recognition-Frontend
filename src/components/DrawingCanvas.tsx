@@ -88,39 +88,28 @@ const DrawingCanvas: React.FC = () => {
         setLoading(false)
     };
 
-    useEffect(() => {
-        clearCanvas();
-    }, []);
 
-    const getTouchPos = (e: React.TouchEvent) => {
+    const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+        e.preventDefault(); // 🔒 blokuje scroll
+        setIsDrawing(true);
+        const touch = e.touches[0];
+        simulateMouse(touch.clientX, touch.clientY);
+    };
+    
+    const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+        e.preventDefault(); // 🔒 blokuje scroll
+        if (!isDrawing) return;
+        const touch = e.touches[0];
+        simulateMouse(touch.clientX, touch.clientY);
+    };
+    
+    const simulateMouse = (clientX: number, clientY: number) => {
         const canvas = canvasRef.current!;
         const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const x = Math.floor((touch.clientX - rect.left) * scaleX / PIXEL_SIZE);
-        const y = Math.floor((touch.clientY - rect.top) * scaleY / PIXEL_SIZE);
-        
-        return { x, y };
-    };
-
-    const handleTouchStart = (e: React.TouchEvent) => {
-        e.preventDefault();
-        setIsDrawing(true);
-        const { x, y } = getTouchPos(e);
-        lastPos.current = { x, y };
+        const x = Math.floor((clientX - rect.left) / PIXEL_SIZE);
+        const y = Math.floor((clientY - rect.top) / PIXEL_SIZE);
     
-        setPixels((prev) => {
-            const updated = markCrossPixels(x, y, prev);
-            drawCrossPixel(canvasRef, x, y);
-            return updated;
-        });
-    };
-    
-    const handleTouchMove = (e: React.TouchEvent) => {
-        e.preventDefault();
-        if (!isDrawing) return;
-        const { x, y } = getTouchPos(e);
+        if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) return;
     
         if (lastPos.current) {
             drawLine(updatePixels, lastPos.current.x, lastPos.current.y, x, y);
@@ -131,7 +120,6 @@ const DrawingCanvas: React.FC = () => {
                 return updated;
             });
         }
-    
         lastPos.current = { x, y };
     };
     
@@ -140,8 +128,10 @@ const DrawingCanvas: React.FC = () => {
         setIsDrawing(false);
         lastPos.current = null;
     };
-    
-    
+
+    useEffect(() => {
+        clearCanvas();
+    }, []);
 
     return (
         <section>
