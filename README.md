@@ -26,7 +26,7 @@ npm run dev # run the project in developer mode
 docker-compose up # 🐳 Run with Docker (backend + frontend)
 ````
 
-🧠 Tech Stack
+## 🧠 Tech Stack
 <p align="center">
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=html,css,js,react,typescript,git,docker" />
